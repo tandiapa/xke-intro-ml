@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <title>SMS spam classifier</title>
+    <!-- build:css /index.css -->
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <!-- endbuild -->
+    <!-- build:css /libs-test.css -->
+    <link rel="stylesheet" type="text/css" href="../vendor/mocha/mocha.css">
+    <link rel="stylesheet" type="text/css" href="../vendor/animate.css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="../vendor/nvd3/nv.d3.css">
+    <!-- endbuild -->
+</head>
+<body class="classifier">
+<div id="mocha" style="margin-right: 0px;"></div>
+<div class="viz"><p>&#37; spam in dataset</p><input type="text" class="dial" id="dataset"></div>
+<div class="viz"><p>&#37; spam in validation set</p><input type="text" class="dial" id="validationset"></div>
+<div class="viz"><p>&#37; correctly classified</p><input type="text" class="dial" id="accuracy"></div>
+<!-- build:js /libs.js -->
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="../vendor/jquery-knob/js/jquery.knob.js"></script>
+<script src="../vendor/lodash/dist/lodash.min.js"></script>
+<!-- endbuild -->
+
+<!-- build:js /libs-test.js -->
+<script src="../vendor-offline/sinon-1.7.3.js"></script>
+<script src="../vendor/mocha/mocha.js"></script>
+<script src="../vendor/chai/chai.js"></script>
+<script src="../vendor-offline/chai-things.js"></script>
+<script src="../js/commons-test.js"></script>
+<script src="../vendor/d3/d3.min.js"></script>
+<script src="../vendor/nvd3/nv.d3.min.js"></script>
+<!-- endbuild -->
+
+<script src="js/classifierTests.js"></script>
+<script src="js/classifier.js"></script>
+</body>
+</html>
