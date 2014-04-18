@@ -56,32 +56,32 @@ $(function () {
                 steps: [
                     {
                         element: "#editor",
-                        intro: "Vous trouverez ici votre éditeur où vous devrez implémenter les différents algorithmes des exercices",
+                        intro: "You will write the code of the algorithms in the text editor",
                         position: "right"
                     },
                     {
                         element: "#result",
-                        intro: "Ici, vous aurez le résultat de ce vous êtes en train d'implémenter",
+                        intro: "Here, you will have a visual representation of what you have implemented",
                         position: "left"
                     },
                     {
                         element: ".item.algo-link.kmean",
-                        intro: "Vous allez d'abord implémenter Kmeans...",
+                        intro: "You will first implement kmeans.",
                         position: "bottom"
                     },
                     {
                         element: ".item.algo-link.bayes",
-                        intro: "... puis naive Bayes",
+                        intro: "... then Naive Bayes",
                         position: "bottom"
                     },
                     {
                         element: ".item.algo-link.shortcuts",
-                        intro: "Pour vous aidez vous avez les raccoucis clavier de l'éditeur ici",
+                        intro: "Editor shortcuts can be found here",
                         position: "bottom"
                     },
                     {
                         element: ".item.algo-link.slides",
-                        intro: "Les slides de ce XKE ici",
+                        intro: "Presentation slides can be found here",
                         position: "bottom"
                     }
                 ]
