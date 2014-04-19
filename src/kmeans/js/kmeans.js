@@ -47,14 +47,6 @@ function randFloat(a, b) {
     return t * a + (1 - t) * b;
 }
 
-function KmeansDrawingContext(canvas) {
-    this.canvas = canvas;
-    this.context = canvas.getContext('2d');
-    this.Ox = this.canvas.width / 2;
-    this.Oy = this.canvas.height / 2;
-    this.radius = 2;
-}
-
 function start() {
 
     $('input[type=button]').hide();
@@ -108,10 +100,6 @@ function start() {
                 key: 'Cluster ' + i,
                 values: (function () {
                     return _.map(cluster, function (point) {
-                        if(!((-2 <= point[0]) && (point[0] <= 2)
-                            && (-2 <= point[1]) && (point[1] <= 2))) {
-                            console.log('nope! ', point);
-                        }
                         return {
                             x: point[0],
                             y: point[1],
