@@ -227,68 +227,68 @@ describe('Kmeans', function () {
         it('should take two parameters. The first is the number of cluster we want find and the second are the points ', function () {
             nbParamsOf(kmeans).should.equal(2, 'The determineNewCentroid function doesn\'t contain two parameters');
         });
-        it('should call pickStartingCentroids one time to pick randomly points to start the centroid research', function () {
-            // prevent future calls
-            sandbox.stub(window, "partitionUsingTheDistance");
-            pickStartingCentroids.withArgs(2,[[1,1],[2,2],[3,3],[4,4]]).returns();
+//        it('should call pickStartingCentroids one time to pick randomly points to start the centroid research', function () {
+//            // prevent future calls
+//            sandbox.stub(window, "partitionUsingTheDistance");
+//            pickStartingCentroids.withArgs(2,[[1,1],[2,2],[3,3],[4,4]]).returns();
+//
+//            kmeans(2, [[1,1],[2,2],[3,3],[4,4]]);
+//            pickStartingCentroids.callCount.should.be.equal(1);
+//            pickStartingCentroids.calledWith(2, [[1,1],[2,2],[3,3],[4,4]]).should.true;
+//        });
+//        it('should call partitionUsingTheDistance and updateCentroidsFunc 1000 times. The first call of ' +
+//            'partitionUsingTheDistance must be made with the result of pickStartingCentroids in first arg and the points' +
+//            ' in second arg. The next calls of partitionUsingTheDistance will take the (potential) centroids returned by ' +
+//            'updateCentroids. updateCentroids will take the previous result of partitionUsingTheDistance', function () {
+//
+//            var points = [ [1,1], [3,3], [8,8], [10,10] ], // points
+//                nbClusters = 2, // number of cluster that we search
+//                startingPoints = [points[0],points[2]]; // points that pickStartingCentroids should return
+//
+//            // mock functions to ensure a testable predictive behavior
+//            pickStartingCentroids.withArgs(nbClusters, points).returns(startingPoints);
+//            sandbox.spy(window, "partitionUsingTheDistance");
+//
+//            kmeans(nbClusters, points);
+//
+//            // check partitionUsingTheDistance function number of call and the args passed
+//            partitionUsingTheDistance.callCount.should.be.least(1000);
+//            expect(partitionUsingTheDistance.calledWith(startingPoints, points)).to.be.equal(true,
+//                'partitionUsingTheDistanceis is called correctly the first time');
+//            expect(partitionUsingTheDistance.calledWith([[2,2],[9,9]], points)).be.be.equal(true,
+//                'partitionUsingTheDistance is called correctly the 999 next times');
+//
+//            // check partitionUsingTheDistance function number of call and the args passed
+//            updateCentroids.callCount.should.be.equal(1000);
+//        });
+//       it('should return a object with a "centroids" property and a "partition" property who contain respectively an ' +
+//           'array of centroids and the clusters of points (be careful: you should surly compute a last time ' +
+//           'partitionUsingTheDistance to have the last clusters)', function () {
 
-            kmeans(2, [[1,1],[2,2],[3,3],[4,4]]);
-            pickStartingCentroids.callCount.should.be.equal(1);
-            pickStartingCentroids.calledWith(2, [[1,1],[2,2],[3,3],[4,4]]).should.true;
-        });
-        it('should call partitionUsingTheDistance and updateCentroidsFunc 1000 times. The first call of ' +
-            'partitionUsingTheDistance must be made with the result of pickStartingCentroids in first arg and the points' +
-            ' in second arg. The next calls of partitionUsingTheDistance will take the (potential) centroids returned by ' +
-            'updateCentroids. updateCentroids will take the previous result of partitionUsingTheDistance', function () {
+//           pickStartingCentroids.restore(); // necessary because of a SinonJS bug !
+//           var points = [ [1,1], [3,3], [8,8], [10,10] ], // points
+//               nbClusters = 2; // number of cluster that we search
 
-            var points = [ [1,1], [3,3], [8,8], [10,10] ], // points
-                nbClusters = 2, // number of cluster that we search
-                startingPoints = [points[0],points[2]]; // points that pickStartingCentroids should return
+//           var result = kmeans(nbClusters, points);
+//           expect(result).to.be.an('object');
 
-            // mock functions to ensure a testable predictive behavior
-            pickStartingCentroids.withArgs(nbClusters, points).returns(startingPoints);
-            sandbox.spy(window, "partitionUsingTheDistance");
-
-            kmeans(nbClusters, points);
-
-            // check partitionUsingTheDistance function number of call and the args passed
-            partitionUsingTheDistance.callCount.should.be.least(1000);
-            expect(partitionUsingTheDistance.calledWith(startingPoints, points)).to.be.equal(true,
-                'partitionUsingTheDistanceis is called correctly the first time');
-            expect(partitionUsingTheDistance.calledWith([[2,2],[9,9]], points)).be.be.equal(true,
-                'partitionUsingTheDistance is called correctly the 999 next times');
-
-            // check partitionUsingTheDistance function number of call and the args passed
-            updateCentroids.callCount.should.be.equal(1000);
-        });
-        it('should return a object with a "centroids" property and a "partition" property who contain respectively an ' +
-            'array of centroids and the clusters of points (be careful: you should surly compute a last time ' +
-            'partitionUsingTheDistance to have the last clusters)', function () {
-
-            pickStartingCentroids.restore(); // necessary because of a SinonJS bug !
-            var points = [ [1,1], [3,3], [8,8], [10,10] ], // points
-                nbClusters = 2; // number of cluster that we search
-
-            var result = kmeans(nbClusters, points);
-            expect(result).to.be.an('object');
-
-            expect(result).to.have.property('centroids')
-                .that.is.an('array')// it's a list ?
-                .and.all.be.an('array');// it's points ?
-            arrayShouldContainAll(result.centroids, [2,2], [9,9]);
+//           expect(result).to.have.property('centroids')
+//               .that.is.an('array')// it's a list ?
+//               .and.all.be.an('array');// it's points ?
+//           arrayShouldContainAll(result.centroids, [2,2], [9,9]);
 
 
-            expect(result).to.have.property('clusters')
-                .that.is.an('object') // it's a map of cluster (key: index of a centroid, value : cluster)?
-                .and.have.keys("0", "1"); // contains only two clusters
+//           expect(result).to.have.property('clusters')
+//               .that.is.an('object') // it's a map of cluster (key: index of a centroid, value : cluster)?
+//               .and.have.keys("0", "1"); // contains only two clusters
 
-            var index2_2 = _.findIndex(result.centroids, function(centroid){
-                return centroid[0] === 2 && centroid[1] === 2;
-            });
-            var index9_9 = ~~!index2_2; // return 0 if 1, and 1 if 0
+//           var index2_2 = _.findIndex(result.centroids, function(centroid){
+//               return centroid[0] === 2 && centroid[1] === 2;
+//           });
+//           var index9_9 = ~~!index2_2; // return 0 if 1, and 1 if 0
 
-            arrayShouldContainAll(result.clusters[index9_9], [8,8], [10,10]);
-            arrayShouldContainAll(result.clusters[index2_2], [1,1], [3,3]);
-        });
+//           arrayShouldContainAll(result.clusters[index9_9], [8,8], [10,10]);
+//           arrayShouldContainAll(result.clusters[index2_2], [1,1], [3,3]);
+//       });
     });
 });

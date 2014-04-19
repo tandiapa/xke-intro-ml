@@ -55,44 +55,14 @@ function KmeansDrawingContext(canvas) {
     this.radius = 2;
 }
 
-KmeansDrawingContext.prototype = {
-    renderDataSet: function (points, color) {
-        var _color = color || 'blue';
-
-        for (var i = 0; i < points.length; i++) {
-            this.circle(points[i], _color);
-        }
-    },
-    circle: function (p, color) {
-        var c = this.toGraphCoord(p);
-        this.context.beginPath();
-        this.context.arc(c[0], c[1], this.radius, 0, 2 * Math.PI, false);
-        this.context.fillStyle = color || 'red';
-        this.context.fill();
-    },
-    cross: function (p, color) {
-        var c = this.toGraphCoord(p);
-        this.context.beginPath();
-        this.context.strokeStyle = color || 'red';
-        this.context.moveTo(c[0] - 5, c[1] - 5);
-        this.context.lineTo(c[0] + 5, c[1] + 5);
-        this.context.moveTo(c[0] - 5, c[1] + 5);
-        this.context.lineTo(c[0] + 5, c[1] - 5);
-        this.context.stroke();
-    },
-    toGraphCoord: function (p) {
-        return [
-            this.Ox + p[0] * this.Ox,
-            this.Oy - p[1] * this.Oy
-        ];
-    },
-    clear: function () {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    }
-};
-
-
 function start() {
+
+    $('input[type=button]').hide();
+    $('#new-set').click(initData);
+
+    var dataset = [],
+        results = [],
+        currentFrame=0;
 
     function noise(centroid, x) {
         var d = distance(centroid, x);
@@ -106,24 +76,30 @@ function start() {
         return x;
     }
 
-    window.data = function () {
-        function noise(centroid, x) {
-            var d = distance(centroid, x);
+    function initData() {
+        dataset = kmeansGenerateDataset(4, 30, noise);
+        dataset.points = dataset.points.filter(function(point) {
+            return (-1 <= point[0]) && (point[0] <= 1)
+                && (-1 <= point[1]) && (point[1] <= 1);
+        });
+        results = [];
+        currentFrame = 0;
 
-            if (d < 0.1) {
-                return [
-                    x[0] + randFloat(0.1, 0.2),
-                    x[1] + randFloat(0.1, 0.2)
-                ];
-            }
-            return x;
+        var finalResult = kmeans(4, dataset.points, function(r) {
+            results.push(_.cloneDeep(r));
+        });
+
+        if(results.length === 0) {
+            results.push(finalResult);
         }
 
-        var data = kmeansGenerateDataset(4, 30, noise);
-        var sets = [];
-        var result = kmeans(4, data.points);
-        console.log(result);
+        redraw();
+    }
 
+    window.data = function () {
+        var data = dataset;
+        var sets = [];
+        var result = results[currentFrame++ % results.length];
 
         var i = 0;
         _.each(result.clusters, function (cluster) {
@@ -132,6 +108,10 @@ function start() {
                 key: 'Cluster ' + i,
                 values: (function () {
                     return _.map(cluster, function (point) {
+                        if(!((-2 <= point[0]) && (point[0] <= 2)
+                            && (-2 <= point[1]) && (point[1] <= 2))) {
+                            console.log('nope! ', point);
+                        }
                         return {
                             x: point[0],
                             y: point[1],
@@ -160,6 +140,9 @@ function start() {
     };
 
     function redraw() {
+        if(results.length > 1) {
+            $('#iteration').text('iteration: ' + currentFrame % results.length);
+        }
 
         nv.addGraph(function () {
             var chart = nv.models.scatterChart()
@@ -172,7 +155,7 @@ function start() {
 
             d3.select('svg')
                 .datum(data())
-                .transition().duration(1000)
+                //.transition().duration(1000)
                 .call(chart);
 
             nv.utils.windowResize(chart.update);
@@ -185,6 +168,8 @@ function start() {
     mocha.run(function(){
         scroolToFailOrDisplayDemo(function(){
             if ($('#mocha').css('display') === "none"){
+                $('input[type=button]').show();
+                initData();
                 setInterval(function () {
                     redraw();
                 }, 2000);
