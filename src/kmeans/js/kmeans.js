@@ -48,13 +48,25 @@ function randFloat(a, b) {
 }
 
 function start() {
+    var dataset = [],
+        results = [],
+        currentFrame=0,
+        pause = false;
 
     $('input[type=button]').hide();
     $('#new-set').click(initData);
 
-    var dataset = [],
-        results = [],
-        currentFrame=0;
+    $('#pause').click(function() {
+        pause = true;
+    });
+
+    $('#play').click(function() {
+        pause = false;
+    });
+
+    $('#next').click(function() {
+        redraw();
+    });
 
     function noise(centroid, x) {
         var d = distance(centroid, x);
@@ -159,7 +171,9 @@ function start() {
                 $('input[type=button]').show();
                 initData();
                 setInterval(function () {
-                    redraw();
+                    if(!pause) {
+                        redraw();
+                    }
                 }, 2000);
             }
         });
