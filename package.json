@@ -24,6 +24,8 @@
     "grunt-usemin": "~2.0.2",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.3.2",
-    "grunt-contrib-cssmin": "~0.7.0"
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt-shell": "~0.6.4",
+    "grunt-build-control": "~0.1.2"
   }
 }

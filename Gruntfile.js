@@ -37,36 +37,36 @@ module.exports = function (grunt) {
         },
         copy: {
             build: {
-                files:[
+                files: [
                     {
                         cwd: 'src',
                         src: [ '*.{html,js}', 'kmeans/**', 'spam-classifier/**', 'img/**'],
-                        dest: 'build',
+                        dest: 'dist',
                         expand: true
                     },
                     {
                         cwd: 'src/vendor/ace-builds/src-min-noconflict',
-                        src: [ 'theme-ambiance.js', 'mode-javascript.js','worker-javascript.js'],
-                        dest: 'build',
+                        src: [ 'theme-ambiance.js', 'mode-javascript.js', 'worker-javascript.js'],
+                        dest: 'dist',
                         expand: true
                     },
                     {
                         cwd: 'src/vendor/Semantic-UI/build/minified/',
                         src: [ 'fonts/*'],
-                        dest: 'build/',
+                        dest: 'dist/',
                         expand: true
                     },
-                    { src: 'package.json', dest: 'build/' },
-                    { src: 'Procfile', dest: 'build/' },
+                    { src: 'package.json', dest: 'dist/' },
+                    { src: 'Procfile', dest: 'dist/' },
                 ]
             }
         },
         clean: {
-            all:{
-                src:['node_modules', 'src/vendor', '.tmp', 'build', 'src/css/*.css']
+            all: {
+                src: ['node_modules', 'src/vendor', '.tmp', 'dist', 'src/css/*.css']
             },
-            build:{
-                src: [ 'build', '.tmp', 'src/css/*.css' ]
+            build: {
+                src: [ 'dist', '.tmp', 'src/css/*.css' ]
             },
             tmp: {
                 src: [ '.tmp']
@@ -75,11 +75,11 @@ module.exports = function (grunt) {
         'useminPrepare': {
             html: ['src/index.html', 'src/kmeans/kmeans.html', 'src/spam-classifier/classifier.html'],
             options: {
-                dest: 'build'
+                dest: 'dist'
             }
         },
         usemin: {
-            html: 'build/**/*.html',
+            html: 'dist/**/*.html',
             options: {
                 assetsDirs: ['src/img']
             }
@@ -88,7 +88,7 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     src: [
-                        'build/**.{js,css,png,jpg,jpeg,gif,webp,svg}'
+                        'dist/**.{js,css,png,jpg,jpeg,gif,webp,svg}'
                     ]
                 }
             }
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
                 tasks: ['develop', 'delayed-livereload']
             },
             html: {
-                files:['src/*.html'],
+                files: ['src/*.html'],
                 options: {
                     livereload: reloadPort
                 }
@@ -124,6 +124,20 @@ module.exports = function (grunt) {
                     livereload: reloadPort
                 }
             }
+        },
+        buildcontrol: {
+            options: {
+                dir: 'dist',
+                commit: true,
+                push: true,
+                message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+            },
+            pages: {
+                options: {
+                    remote: 'https://github.com/patandia/xke-intro-ml.git',
+                    branch: 'gh-pages'
+                }
+            }
         }
     });
 
@@ -134,7 +148,7 @@ module.exports = function (grunt) {
     grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
         var done = this.async();
         setTimeout(function () {
-            request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function (err, res) {
+            request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','), function (err, res) {
                 var reloaded = !err && res.statusCode === 200;
                 if (reloaded) {
                     grunt.log.ok('Delayed live reload successful.');
@@ -146,16 +160,17 @@ module.exports = function (grunt) {
         }, 500);
     });
 
-    grunt.registerTask('bower', 'install the backend and frontend dependencies', function() {
+    grunt.registerTask('bower', 'install the backend and frontend dependencies', function () {
         var exec = require('child_process').exec;
         var cb = this.async();
-        exec('bower install', {}, function(err, stdout, stderr) {
+        exec('bower install', {}, function (err, stdout, stderr) {
             console.log(stdout);
             cb();
         });
     });
 
-    grunt.registerTask('install', ['bower','less']);
-    grunt.registerTask('build', ['clean:build', 'install', 'copy','useminPrepare','usemin','concat','uglify','cssmin','clean:tmp']);
-    grunt.registerTask('start', ['develop','watch']);
+    grunt.registerTask('install', ['bower', 'less']);
+    grunt.registerTask('dist', ['clean:build', 'install', 'copy', 'useminPrepare', 'usemin', 'concat', 'uglify', 'cssmin', 'clean:tmp']);
+    grunt.registerTask('gh-pages', ['dist', 'buildcontrol.pages']);
+    grunt.registerTask('start', ['develop', 'watch']);
 };
